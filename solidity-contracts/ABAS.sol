@@ -544,8 +544,6 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
 	uint public latestreAdjustStarted = block.timestamp; // shorter blocktime of attempted readjustment
     uint public _BLOCKS_PER_READJUSTMENT = 1024; // should be 1024
     //a little number
-    uint public  _MINIMUM_TARGET = 2**16;
-    
     uint public  _MAXIMUM_TARGET = 2**234;
     uint public  _MINIMUM_TARGET = _MAXIMUM_TARGET.div(100); //100 on testnet, Mainnet = 0xBTC difficulty = 543546542 = 12 min blocks at 4 th/s
     uint public miningTarget = _MAXIMUM_TARGET.div(200000000000*25);  //1000 million difficulty to start until i enable mining
@@ -781,6 +779,74 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 			
 			slowBlocks = slowBlocks.add(1);
 			
+		}
+		
+		//best @ 3000 ratio totalOwed / 100000000 = 71.6
+		if(ratio < 3000){
+			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
+		}else {
+			totalOwed = (24*x*5086060).div(888)+3456750000;
+		}
+
+
+		balances[msg.sender] = balances[msg.sender].add((reward_amount * totalOwed).div(100000000));
+		balances[AddressLPReward] = balances[AddressLPReward].add((reward_amount * totalOwed).div(100000000));
+		balances[AddressLPReward2] = balances[AddressLPReward2].add((reward_amount * totalOwed).div(100000000));
+				
+		tokensMinted = tokensMinted.add((reward_amount * totalOwed).div(100000000));
+		previousBlockTime = block.timestamp;
+		
+
+		emit Mint(msg.sender, (reward_amount * totalOwed).div(100000000), epochCount, challengeNumber );
+
+		return totalOwed;
+
+	}
+	
+	
+	function howMuchETH() public view returns (uint totalNeeded){
+	{
+		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
+		uint ratio = x * 100 / 888 ;
+		
+		
+		if(ratio > 100){
+			return 0;
+		}else{
+			if(ratio ==0){
+				ratio = 1;
+			}
+		}		
+		return ((10**15 * (ratio/25)*25) / 100);
+	}	
+	
+	
+	function mintToJustABAS2(uint256 nonce, bytes32 challenge_digest) public payable returns (uint256 totalOwed) {
+
+		bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
+
+		//the challenge digest must match the expected
+		require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
+
+		//the digest must be smaller than the target
+		require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
+		_startNewMiningEpoch();
+
+		require(block.timestamp > previousBlockTime, "No solve for first 5 seconds.");
+
+		require(uint256(digest) < (miningTarget), "Digest must be smaller than miningTarget");
+		
+		//uint diff = block.timestamp - previousBlockTime;
+		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
+		uint ratio = x * 100 / 888 ;
+		
+		
+		if(ratio > 100){
+			
+			slowBlocks = slowBlocks.add(1);
+			
+		}else{
+			require(msg.value > ((10**15 * (ratio/25)*25) / 100), "Must send more wei because quicker than 12 minutes requires eth, check howMuchETH() function to find amount needed");
 		}
 		
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
