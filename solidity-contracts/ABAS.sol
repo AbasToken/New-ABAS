@@ -806,7 +806,6 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 	
 	
 	function howMuchETH() public view returns (uint totalNeeded){
-	{
 		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
 		uint ratio = x * 100 / 888 ;
 		
@@ -1226,6 +1225,13 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 		return (digest == challenge_digest);
 	}
 
+	function checkMintSolutionForAddress(uint256 nonce, bytes32 challenge_digest, bytes32 challenge_number, uint testTarget, address sender) public view returns (bool success) {
+		bytes32 digest = bytes32(keccak256(abi.encodePacked(challenge_number,sender,nonce)));
+		if(uint256(digest) > testTarget) revert();
+
+		return (digest == challenge_digest);
+	}
+
 
 	//this is a recent ethereum block hash, used to prevent pre-mining future blocks
 	function getChallengeNumber() public view returns (bytes32) {
@@ -1250,9 +1256,10 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 		return tokensMinted;
 	}
 
-    function getCirculatingSupply() public view returns (uint) {
-        return tokensMinted * 3 + AuctionsCT.totalAuctioned();
-    }
+    	function getCirculatingSupply() public view returns (uint) {
+        	return tokensMinted * 3 + AuctionsCT.totalAuctioned();
+    	}
+
 	//21m coins total
 	//reward begins at 150 and is cut in half every reward era (as tokens are mined)
 	function getMiningReward() public view returns (uint) {
