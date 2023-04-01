@@ -1,6 +1,7 @@
 /**
 Testnet added _MINIMUM_TARGET = _MAXIMUM_TARGET.div(100); for 100 difficulty maximum on testnet, doubles every era
 change howMuchETH equation to suit mainnet better. simple 4 stages for testing purposes
+Make sure circulating supply is corrected
  *Submitted for verification at Etherscan.io on 2022-12-20
 */
 
