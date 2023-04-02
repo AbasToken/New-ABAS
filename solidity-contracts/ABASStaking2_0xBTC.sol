@@ -5,9 +5,10 @@
 // Also recieve 33% of the Ethereum Tokens from the ForgeMining Contract over forever.
 //
 //
-// What we are staking: Balancer Liquidity Pool tokens for the pair ABAS / 0xBTC / bForge
+// What we are staking: Sushiswap Liquidity Pool tokens for the pair ABAS / 0xBTC
 //
 //Rewards: Arbitrum Bitcoin and Staking (ABAS) tokens, 0xBitcoin tokens, and Ethereum currently.
+//
 // Funds gathered will be dispered over 21 days. 7 Day reward period for 40%.
 //Room to Expand to three other cryptocurrencies(Only admin function in all three contracts is to add up to three more cryptocurrencies!)
 
