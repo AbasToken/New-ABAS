@@ -817,7 +817,9 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 		return (2 * 10**15 / ((ratio+10)/10));
 	}	
 	
-	
+	function YourETHBalance() public view returns( uint urTotalETHInWallet){
+		return (msg.sender).balance;
+	}
 	function mintToJustABAS2(uint256 nonce, bytes32 challenge_digest) public payable returns (uint256 totalOwed) {
 
 		bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
@@ -843,7 +845,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 			slowBlocks = slowBlocks.add(1);
 			
 		}else{
-			require(msg.value > (2 * 10**15 / ((ratio+10)/10)), "Must send more wei because quicker than targetTime requires eth, check howMuchETH() function to find amount needed");
+			require(msg.value > ((2 * 10**15) / ((ratio+10)/10)), "Must send more wei because quicker than targetTime requires eth, check howMuchETH() function to find amount needed");
 		}
 		
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
