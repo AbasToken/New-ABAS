@@ -693,7 +693,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		return slowBlocks % (_BLOCKS_PER_READJUSTMENT/8);
 	}
 	
-	function mintNFT721(address nftaddy, uint nftNumber, uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
+	function mintNFT721(address nftaddy, uint nftNumber, uint256 nonce, bytes32 challenge_digest) public payable returns (bool success) {
 		require(mintNFTGO() == 0, "Only mint on slowBlocks % _BLOCKS_PER_READJUSTMENT/8 == 0");
 		mintTo(nonce, challenge_digest, msg.sender);
 		IERC721(nftaddy).safeTransferFrom(address(this), msg.sender, nftNumber, "");
@@ -703,7 +703,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		return true;
 	}
 
-	function mintNFT1155(address nftaddy, uint nftNumber, uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
+	function mintNFT1155(address nftaddy, uint nftNumber, uint256 nonce, bytes32 challenge_digest) public payable returns (bool success) {
 		require(mintNFTGO() == 0, "Only mint on slowBlocks % _BLOCKS_PER_READJUSTMENT/8 == 0");
 		mintTo(nonce, challenge_digest, msg.sender);
 		IERC1155(nftaddy).safeTransferFrom(address(this), msg.sender, nftNumber, 1, "" );
@@ -740,13 +740,13 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
-			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
+			require(msg.value >= ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
 			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
-				ratio = ratio - 2999;
-				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+				uint ratioETH = ratio - 2999;
+				require(msg.value >= ((1 * 10**13) / (((ratioETH+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
 			                         //make it 10**15
 			}
 		}
@@ -771,54 +771,6 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		}
 
 		emit Mint(mintToAddress, totalOwedABAS, epochCount, challengeNumber );
-
-		return totalOwed;
-
-	}
-
-
-
-
-	function mintToJustABAS(uint256 nonce, bytes32 challenge_digest) public returns (uint256 totalOwed) {
-
-		bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
-
-		//the challenge digest must match the expected
-		require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
-
-		//the digest must be smaller than the target
-		require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
-		_startNewMiningEpoch();
-
-		require(block.timestamp > previousBlockTime, "No solve for first 5 seconds.");
-
-		//uint diff = block.timestamp - previousBlockTime;
-		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
-		uint ratio = x * 100 / 888 ;
-		
-		
-		if(ratio > 100){
-			
-			slowBlocks = slowBlocks.add(1);
-			
-		}
-		
-		//best @ 3000 ratio totalOwed / 100000000 = 71.6
-		if(ratio < 3000){
-			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
-		}else {
-			totalOwed = (24*x*5086060).div(888)+3456750000;
-		}
-
-		balances[msg.sender] = balances[msg.sender].add((reward_amount * totalOwed).div(100000000));
-		balances[AddressLPReward] = balances[AddressLPReward].add((reward_amount * totalOwed).div(100000000));
-		balances[AddressLPReward2] = balances[AddressLPReward2].add((reward_amount * totalOwed).div(100000000));
-				
-		tokensMinted = tokensMinted.add((reward_amount * totalOwed).div(100000000));
-		previousBlockTime = block.timestamp;
-		
-
-		emit Mint(msg.sender, (reward_amount * totalOwed).div(100000000), epochCount, challengeNumber );
 
 		return totalOwed;
 
@@ -854,11 +806,11 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 	}
 
 	function mintJustABAS(uint256 nonce, bytes32 challenge_digest) public payable returns (bool success){
-		mintToJustABAS2(nonce, challenge_digest, msg.sender);
+		mintToJustABAS(nonce, challenge_digest, msg.sender);
 		return true;
 	}
 
-	function mintToJustABAS2(uint256 nonce, bytes32 challenge_digest, address mintToAddress) public payable returns (uint256 totalOwed) {
+	function mintToJustABAS(uint256 nonce, bytes32 challenge_digest, address mintToAddress) public payable returns (uint256 totalOwed) {
 
 		bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
@@ -885,13 +837,13 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
-			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
+			require(msg.value >= ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
 			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				ratio = ratio - 2999;
-				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+				require(msg.value >= ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
 			                        //make it 10**15
 			}
 		}
@@ -934,13 +886,13 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
-			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
+			//require(msg.value >= ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
 			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				ratio = ratio - 2999;
-				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+			//	require(msg.value >= ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
 		
 			}
 		}
@@ -1015,6 +967,74 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 	}
 
 
+	function mintTokensArrayToJustABAS(uint256 nonce, bytes32 challenge_digest, address[] memory ExtraFunds, address[] memory MintTo) public payable returns (uint256 owed) {
+		uint256 totalOd = mintToJustABAS(nonce,challenge_digest, MintTo[0]);
+		require(totalOd > 0, "mint issue");
+
+		require(MintTo.length == ExtraFunds.length + 1,"MintTo has to have an extra address compared to ExtraFunds");
+		uint xy=0;
+		for(xy = 0; xy< ExtraFunds.length; xy++)
+		{
+			if(epochCount % (2**(xy+1)) != 0){
+				break;
+			}
+			for(uint y=xy+1; y< ExtraFunds.length; y++){
+				require(ExtraFunds[y] != ExtraFunds[xy], "No printing The same tokens");
+			}
+		}
+		
+		uint256 totalOwed = 0;
+		uint256 TotalOwned = 0;
+		for(uint x=0; x<xy; x++)
+		{
+			//epoch count must evenly dividable by 2^n in order to get extra mints. 
+			//ex. epoch 2 = 1 extramint, epoch 4 = 2 extra, epoch 8 = 3 extra mints, ..., epoch 32 = 5 extra mints w/ a divRound for the 5th mint(allows small balance token minting aka NFTs)
+			if(epochCount % (2**(x+1)) == 0){
+				TotalOwned = IERC20(ExtraFunds[x]).balanceOf(address(this));
+				if(TotalOwned != 0){
+					if( x % 3 == 0 && x != 0 && totalOd > 17600000 && give == 2){
+						totalOwed = ( (2** rewardEra) *TotalOwned * totalOd).divRound(100000000 * 20000);
+						
+					}else{
+						totalOwed = ( (2** rewardEra) * TotalOwned * totalOd).div(100000000 * 20000);
+					}
+				}
+			    IERC20(ExtraFunds[x]).transfer(MintTo[x+1], totalOwed);
+			}
+		}
+        	
+        	
+		emit MegaMint(msg.sender, epochCount, challengeNumber, xy, totalOd );
+
+		return totalOd;
+
+    }
+
+	function mintTokensSameAddressJustABAS(uint256 nonce, bytes32 challenge_digest, address[] memory ExtraFunds, address MintTo) public payable returns (bool success) {
+		address[] memory dd = new address[](ExtraFunds.length + 1); 
+
+		for(uint x=0; x< (ExtraFunds.length + 1); x++)
+		{
+			dd[x] = MintTo;
+		}
+		
+		mintTokensArrayToJustABAS(nonce, challenge_digest, ExtraFunds, dd);
+
+		return true;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 	function empty_mintTo(uint256 nonce, bytes32 challenge_digest, address[] memory ExtraFunds, address[] memory MintTo) public payable returns (uint256 owed) {
 		bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
@@ -1054,13 +1074,13 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
-			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
+			require(msg.value >= ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
 			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				ratio = ratio - 2999;
-				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+				require(msg.value >= ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
 						  //make it 10**15
 			}
 		}
