@@ -863,6 +863,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
 		if(ratio < 3000){
+			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
 			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
 			                    //make it 10**15
 		}else {
