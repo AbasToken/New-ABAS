@@ -12,7 +12,7 @@
 //// What we are staking: Balancer Liquidity Pool tokens for the pair ABAS / Ethereum
 //
 //Rewards: Arbitrum Bitcoin and Staking (ABAS), 0xBitcoin, and Ethereum currently.
-// Funds gathered will be dispered over 2 months. 24 Day reward period for 40%.
+// Funds gathered will be dispered over 40 day periods.
 //Room to Expand to three other cryptocurrencies(Only admin function in all three contracts is to add up to three more cryptocurrencies!)
 
 pragma solidity ^0.8.11;
