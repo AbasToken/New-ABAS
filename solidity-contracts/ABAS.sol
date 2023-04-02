@@ -851,8 +851,9 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		return (msg.sender).balance;
 	}
 
-	function mintJustABAS(uint256 nonce, bytes32 challenge_digest) public payable {
+	function mintJustABAS(uint256 nonce, bytes32 challenge_digest) public payable returns (bool success){
 		mintToJustABAS2(nonce, challenge_digest, msg.sender);
+		return true;
 	}
 
 	function mintToJustABAS2(uint256 nonce, bytes32 challenge_digest, address mintToAddress) public payable returns (uint256 totalOwed) {
