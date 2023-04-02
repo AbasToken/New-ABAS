@@ -823,7 +823,8 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		
 		if(ratio >= 3000){
 			if(ratio < 6000){
-				return ((1 * 10**13) / ((ratio+7)/10)) / 2;
+				ratio = ratio - 2999;
+				return ((1 * 10**13) / ((ratio+7)/10)) / 3;
 				 //make it 10**15
 			}
 			return 0;
@@ -877,7 +878,8 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
-				require(msg.value > ((1 * 10**13) / ((ratio+10)/10)) / 2, "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+				ratio = ratio - 2999;
+				require(msg.value > ((1 * 10**13) / ((ratio+10)/10)) / 4, "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
 		
 			}
 		}
