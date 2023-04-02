@@ -747,14 +747,16 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 			if(ratio < 6000){
 				ratio = ratio - 2999;
 				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-		
+			                         //make it 10**15
 			}
 		}
 
 		uint totalOwedABAS = (reward_amount * totalOwed).div(100000000);
+		
 		balances[mintToAddress] = balances[mintToAddress].add(totalOwedABAS);
-		tokensMinted = tokensMinted.add(totalOwedABAS);
 		emit Transfer(address(0), mintToAddress, totalOwedABAS);
+		
+		tokensMinted = tokensMinted.add(totalOwedABAS);
 		previousBlockTime = block.timestamp;
 		if(give0x > 0){
 			if(ratio < 2000){
@@ -890,7 +892,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 			if(ratio < 6000){
 				ratio = ratio - 2999;
 				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-		
+			                        //make it 10**15
 			}
 		}
 
@@ -1059,7 +1061,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 			if(ratio < 6000){
 				ratio = ratio - 2999;
 				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-		
+						  //make it 10**15
 			}
 		}
 
