@@ -652,8 +652,11 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 
 		uint totalOwedABAS = (epochsPast * reward_amount * totalOwed).div(100000000);
 		balances[AddressLPReward] = balances[AddressLPReward].add(totalOwedABAS);
+		emit Transfer(address(0), AddressLPReward, totalOwedABAS);
 		balances[AddressLPReward2] = balances[AddressLPReward2].add(totalOwedABAS);
+		emit Transfer(address(0), AddressLPReward2, totalOwedABAS);
 		balances[AddressLPReward3] = balances[AddressLPReward3].add(totalOwedABAS);
+		emit Transfer(address(0), AddressLPReward3, totalOwedABAS);
 				
 		if( address(this).balance > (200 * (Token2Per * _BLOCKS_PER_READJUSTMENT)/4)){  // at least enough blocks to rerun this function for both LPRewards and Users
 			//IERC20(AddressZeroXBTC).transfer(AddressLPReward, ((epochsPast) * totalOwed * Token2Per * give0xBTC).div(100000000));
@@ -888,7 +891,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		balances[msg.sender] = balances[msg.sender].add(totalOwed);
 				
 		tokensMinted = tokensMinted.add(totalOwed);
-		emit Transfer(address(0x0000000000000000000000000000000000000000), msg.sender, totalOwed);
+		emit Transfer(address(0), msg.sender, totalOwed);
 		previousBlockTime = block.timestamp;
 		emit Mint(msg.sender, totalOwed, epochCount, challengeNumber);
 
