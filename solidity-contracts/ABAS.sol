@@ -3,6 +3,7 @@ Testnet added _MINIMUM_TARGET = _MAXIMUM_TARGET.div(100); for 100 difficulty max
 change howMuchETH equation to suit mainnet better. simple 4 stages for testing purposes
 Make sure circulating supply is corrected
 make sure ratio required is adjusted to mainnet eth amounts, same with howMuchETH() function check eth amount
+Delete mintToFree before launch
  *Submitted for verification at Etherscan.io on 2022-12-20
 */
 
@@ -815,20 +816,27 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 
 	}
 	
-
-	//A Little ahead so we dont bump into error.
-	function howMuchETH() public view returns (uint totalNeeded){
-		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
+	function howMuchETHatTime(uint secondsBetweenEpoch) public view returns (uint totalETHNeeded){
+		uint256 x = ((secondsBetweenEpoch) * 888) / targetTime;
 		uint ratio = x * 100 / 888;
 		
 		
 		if(ratio >= 3000){
+			if(ratio < 6000){
+				return ((1 * 10**13) / ((ratio+7)/10)) / 2;
+				 //make it 10**15
+			}
 			return 0;
 		}else if(ratio > 18){
 			ratio = ratio - 3;
 		}
-		return (2 * 10**13 / ((ratio+10)/10));
+		return (1 * 10**13 / ((ratio+10)/10));
 				 //make it 10**15
+	}
+
+	//A Little ahead so we dont bump into error.
+	function howMuchETH() public view returns (uint totalETHNeeded){
+		return howMuchETHatTime((block.timestamp - previousBlockTime));
 	}
 	
 	function YourETHBalance() public view returns( uint urTotalETHInWallet){
@@ -868,6 +876,55 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
+			if(ratio < 6000){
+				require(msg.value > ((1 * 10**13) / ((ratio+10)/10)) / 2, "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+		
+			}
+		}
+
+		totalOwed = (reward_amount * totalOwed).div(100000000);
+		balances[msg.sender] = balances[msg.sender].add(totalOwed);
+				
+		tokensMinted = tokensMinted.add(totalOwed);
+		emit Transfer(address(0x0000000000000000000000000000000000000000), msg.sender, totalOwed);
+		previousBlockTime = block.timestamp;
+		emit Mint(msg.sender, totalOwed, epochCount, challengeNumber);
+
+		return totalOwed;
+
+	}
+
+		//change to non bools for launch and delete this function
+	function mintToFREE(bool nonce, bool challenge_digest) public payable returns (uint256 totalOwed) {
+
+		_startNewMiningEpoch();
+
+		require(block.timestamp > previousBlockTime, "No solve for first 5 seconds.");
+
+		require(uint256(digest) < (miningTarget), "Digest must be smaller than miningTarget");
+		
+		//uint diff = block.timestamp - previousBlockTime;
+		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
+		uint ratio = x * 100 / 888 ;
+		
+		
+		if(ratio > 100){
+			
+			slowBlocks = slowBlocks.add(1);
+			
+		}
+		
+		//best @ 3000 ratio totalOwed / 100000000 = 71.6
+		if(ratio < 3000){
+			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
+			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
+			                    //make it 10**15
+		}else {
+			totalOwed = (24*x*5086060).div(888)+3456750000;
+			if(ratio < 6000){
+				require(msg.value > ((1 * 10**13) / ((ratio+10)/10)) / 2, "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+		
+			}
 		}
 
 		totalOwed = (reward_amount * totalOwed).div(100000000);
