@@ -2,6 +2,7 @@
 Testnet added _MINIMUM_TARGET = _MAXIMUM_TARGET.div(100); for 100 difficulty maximum on testnet, doubles every era
 change howMuchETH equation to suit mainnet better. simple 4 stages for testing purposes
 Make sure circulating supply is corrected
+make sure ratio required is adjusted to mainnet eth amounts, same with howMuchETH() function check eth amount
  *Submitted for verification at Etherscan.io on 2022-12-20
 */
 
@@ -529,6 +530,7 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
     ABASAuctionsCT public AuctionsCT;
     address public AddressLPReward;
     address public AddressLPReward2;
+    address public AddressLPReward3;
 //Events
     using SafeMath2 for uint256;
     using ExtendedMath2 for uint;
@@ -581,7 +583,7 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
     emit Transfer(address(0), msg.sender, 1000000000000000000);
 	}
 
-function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) public onlyOwner{
+function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, address LPGuild4) public onlyOwner{
         uint x = 21000000000000000000000000; 
         // Only init once
         assert(!initeds);
@@ -607,6 +609,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
         AuctionsCT = ABASAuctionsCT(AddressAuction);
         AddressLPReward = payable(LPGuild2);
         AddressLPReward2 = payable(LPGuild3);
+        AddressLPReward3 = payable(LPGuild4);
 		slowBlocks = 1;
         oldecount = epochCount;
 	
@@ -646,12 +649,20 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 			totalOwed = (3200000000);
 		} 
 
+		uint totalOwedABAS = (epochsPast * reward_amount * totalOwed).div(100000000);
+		balances[AddressLPReward] = balances[AddressLPReward].add(totalOwedABAS);
+		balances[AddressLPReward2] = balances[AddressLPReward2].add(totalOwedABAS);
+		balances[AddressLPReward3] = balances[AddressLPReward3].add(totalOwedABAS);
+				
 		if( address(this).balance > (200 * (Token2Per * _BLOCKS_PER_READJUSTMENT)/4)){  // at least enough blocks to rerun this function for both LPRewards and Users
 			//IERC20(AddressZeroXBTC).transfer(AddressLPReward, ((epochsPast) * totalOwed * Token2Per * give0xBTC).div(100000000));
-          		 address payable to = payable(AddressLPReward);
+          	 address payable to = payable(AddressLPReward);
 			 address payable to2 = payable(AddressLPReward2);
-           		 to.transfer(((epochsPast) * totalOwed * Token2Per * give0x).div(100000000));
-           		 to2.transfer(((epochsPast) * totalOwed * Token2Per * give0x).div(100000000));
+			 address payable to3 = payable(AddressLPReward3);
+			 totalOwed = ((epochsPast) * totalOwed * Token2Per * give0x).div(100000000);
+           	to.transfer(totalOwed);
+           	to2.transfer(totalOwed);
+           	to3.transfer(totalOwed);
            		 give0x = 1 * give;
 		}else{
 			give0x = 0;
@@ -790,7 +801,6 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 		}
 
-
 		balances[msg.sender] = balances[msg.sender].add((reward_amount * totalOwed).div(100000000));
 		balances[AddressLPReward] = balances[AddressLPReward].add((reward_amount * totalOwed).div(100000000));
 		balances[AddressLPReward2] = balances[AddressLPReward2].add((reward_amount * totalOwed).div(100000000));
@@ -805,21 +815,26 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 
 	}
 	
-	
+
+	//A Little ahead so we dont bump into error.
 	function howMuchETH() public view returns (uint totalNeeded){
 		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
-		uint ratio = x * 100 / 888 ;
+		uint ratio = x * 100 / 888;
 		
 		
-		if(ratio > 100){
+		if(ratio >= 3000){
 			return 0;
+		}else if(ratio > 18){
+			ratio = ratio - 3;
 		}
-		return (2 * 10**15 / ((ratio+10)/10));
-	}	
+		return (2 * 10**13 / ((ratio+10)/10));
+				 //make it 10**15
+	}
 	
 	function YourETHBalance() public view returns( uint urTotalETHInWallet){
 		return (msg.sender).balance;
 	}
+
 	function mintToJustABAS2(uint256 nonce, bytes32 challenge_digest) public payable returns (uint256 totalOwed) {
 
 		bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
@@ -844,27 +859,23 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3) publ
 			
 			slowBlocks = slowBlocks.add(1);
 			
-		}else{
-			require(msg.value > ((2 * 10**15) / ((ratio+10)/10)), "Must send more wei because quicker than targetTime requires eth, check howMuchETH() function to find amount needed");
 		}
 		
 		//best @ 3000 ratio totalOwed / 100000000 = 71.6
 		if(ratio < 3000){
-			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
+			require(msg.value > ((1 * 10**13) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
+			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 		}
 
-
-		balances[msg.sender] = balances[msg.sender].add((reward_amount * totalOwed).div(100000000));
-		balances[AddressLPReward] = balances[AddressLPReward].add((reward_amount * totalOwed).div(100000000));
-		balances[AddressLPReward2] = balances[AddressLPReward2].add((reward_amount * totalOwed).div(100000000));
+		totalOwed = (reward_amount * totalOwed).div(100000000);
+		balances[msg.sender] = balances[msg.sender].add(totalOwed);
 				
-		tokensMinted = tokensMinted.add((reward_amount * totalOwed).div(100000000));
+		tokensMinted = tokensMinted.add(totalOwed);
+		emit Transfer(address(0x0000000000000000000000000000000000000000), msg.sender, totalOwed);
 		previousBlockTime = block.timestamp;
-		
-
-		emit Mint(msg.sender, (reward_amount * totalOwed).div(100000000), epochCount, challengeNumber );
+		emit Mint(msg.sender, totalOwed, epochCount, challengeNumber);
 
 		return totalOwed;
 
