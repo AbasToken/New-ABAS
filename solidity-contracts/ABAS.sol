@@ -824,7 +824,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 		if(ratio >= 3000){
 			if(ratio < 6000){
 				ratio = ratio - 2999;
-				return ((1 * 10**13) / ((ratio+7)/10)) / 3;
+				return ((1 * 10**13) / (((ratio+7) / 10) * 500)) ;
 				 //make it 10**15
 			}
 			return 0;
@@ -879,7 +879,7 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				ratio = ratio - 2999;
-				require(msg.value > ((1 * 10**13) / ((ratio+10)/10)) / 4, "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
+				require(msg.value > ((1 * 10**13) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
 		
 			}
 		}
@@ -903,7 +903,6 @@ function zinit(address AuctionAddress2, address LPGuild2, address LPGuild3, addr
 
 		require(block.timestamp > previousBlockTime, "No solve for first 5 seconds.");
 
-		require(uint256(digest) < (miningTarget), "Digest must be smaller than miningTarget");
 		
 		//uint diff = block.timestamp - previousBlockTime;
 		uint256 x = ((block.timestamp - previousBlockTime) * 888) / targetTime;
