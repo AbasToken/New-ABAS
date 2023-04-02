@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at Arbiscan on 2022-12-20
-*/
-
 // Arbitrum Bitcoin and Staking (ABAS) - Staking Contract #2
 //
 // Sushiswap Liquidity Pool ABAS / 0xBTC Staking
