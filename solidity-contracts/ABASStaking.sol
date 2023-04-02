@@ -290,7 +290,7 @@ contract ArbitrumBitcoinAndStakingRewards is StakedTokenWrapper, Ownable2 {
 	    uint64 poolLength2 = uint64(AuctionCT.secondsPerDay());
 	    uint _era = AuctionCT.currentEra();
 	    if(_era < 5){
-	    	poolLength = poolLength2*3;
+	    	poolLength = (poolLength2*3) / 2;
 	    }else if(_era  < 10){
 	    	poolLength = poolLength2*5;
 	    }else if(poolLength < poolLength2){
@@ -888,14 +888,14 @@ function getRewardBasicBasic(uint choice) public updateReward(msg.sender) {
             this.Z_setRewardParamsExtraExtra(3, 33);
             this.Z_setRewardParamsExtra(3, 33);
         }else{
-            this.Z_setRewardParamsForge(2, 22);
+            this.Z_setRewardParamsABAS(2, 22);
             this.Z_setRewardParams0xBTC(2, 22);
             this.Z_setRewardParamsETH(2, 22);
         }
     }
 
 
-    function Z_setRewardParamsForge(uint256 reward, uint64 duration) external {
+    function Z_setRewardParamsABAS(uint256 reward, uint64 duration) external {
         unchecked {
             require(reward > 0);
             duration = poolLength; 
