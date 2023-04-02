@@ -4,7 +4,7 @@
 
 // Arbitrum Bitcoin and Staking (ABAS) - Staking Contract #2
 //
-// Balancer Liquidity Pool 0xBitcoin / bForge / Arbitrum Bitcoin and Staking (ABAS) Staking
+// Sushiswap Liquidity Pool ABAS / 0xBTC Staking
 // Recieves 28% or 21,000,000 ABAS Tokens from the ForgeMining Contract over 100+ years.
 // Also recieve 33% of the Ethereum Tokens from the ForgeMining Contract over forever.
 //
@@ -152,7 +152,7 @@ contract StakedTokenWrapper {
     }
 }
 
-contract ForgeAuctionsCT{
+contract ABASAuctionsCT{
     uint256 public secondsPerDay;
     uint256 public currentEra;
     }
@@ -212,7 +212,7 @@ contract ArbitrumBitcoinAndStakingRewards2 is StakedTokenWrapper, Ownable2 {
     uint256 public rewardPerTokenStoredExtraExtra2;
     uint256 public rewardPerTokenStoredExtraExtra3;
 	
-	ForgeAuctionsCT public AuctionCT;
+	ABASAuctionsCT public AuctionCT;
     struct UserRewards {
         uint256 userRewardPerTokenPaid;
         uint256 rewards;
@@ -278,7 +278,7 @@ contract ArbitrumBitcoinAndStakingRewards2 is StakedTokenWrapper, Ownable2 {
     event RewardAdded7(uint256 rewards7);
     event RewardPaidExtraExtra3(address indexed user, uint256 rewardsExtraExtra3);
 
-    constructor(IERC20 _rewardABAS, IERC20 _LP, IERC20 _reward0xBTC, ForgeAuctionsCT AuctionAddress) {
+    constructor(IERC20 _rewardABAS, IERC20 _LP, IERC20 _reward0xBTC, ABASAuctionsCT AuctionAddress) {
         rewardToken = _rewardABAS;
         stakedToken = _LP;
         rewardToken2 = _reward0xBTC;
@@ -290,7 +290,7 @@ contract ArbitrumBitcoinAndStakingRewards2 is StakedTokenWrapper, Ownable2 {
 	    uint64 poolLength2 = uint64(AuctionCT.secondsPerDay());
 	    uint _era = AuctionCT.currentEra();
 	    if(_era < 5){
-	    	poolLength = poolLength2*3;
+	    	poolLength = (poolLength2 * 3) / 2;
 	    }else if(_era  < 10){
 	    	poolLength = poolLength2*5;
 	    }else if(poolLength < poolLength2){
@@ -887,14 +887,14 @@ function getRewardBasicBasic(uint choice) public updateReward(msg.sender) {
             this.Z_setRewardParamsExtraExtra(3, 33);
             this.Z_setRewardParamsExtra(3, 33);
         }else{
-            this.Z_setRewardParamsForge(2, 22);
+            this.Z_setRewardParamsABAS(2, 22);
             this.Z_setRewardParams0xBTC(2, 22);
             this.Z_setRewardParamsETH(2, 22);
         }
     }
 
 
-    function Z_setRewardParamsForge(uint256 reward, uint64 duration) external {
+    function Z_setRewardParamsABAS(uint256 reward, uint64 duration) external {
         unchecked {
             require(reward > 0);
             duration = poolLength; 
