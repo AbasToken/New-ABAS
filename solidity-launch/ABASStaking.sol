@@ -8,7 +8,7 @@
 //
 //// What we are staking: Sushiswap Liquidity Pool tokens for the pair ABAS / Ethereum
 //
-//Rewards: Arbitrum Bitcoin and Staking (ABAS), 0xBitcoin, and Ethereum currently/
+//Rewards: Arbitrum Bitcoin and Staking (ABAS), 0xBitcoin, and Ethereum currently
 // Funds gathered will be dispered over 2 months.
 //Room to Expand to three other cryptocurrencies(Only admin function in all three contracts is to add up to three more cryptocurrencies!)
 
