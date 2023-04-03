@@ -1305,8 +1305,9 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
         	return tokensMinted + sentToLP + AuctionsCT.totalAuctioned();
     	}
 
-	//21m coins total
-	//reward begins at 150 and is cut in half every reward era (as tokens are mined)
+	//~21m coins total in minting
+	//reward begins at 20 and the same for the first 8 eras (0-7), targetTime doubles to compensate for first 8 eras
+	//After rewardEra = 8 it halves the reward every Era after because no more targetTime is added
 	function getMiningReward() public view returns (uint) {
 		//once we get half way thru the coins, only get 25 per block
 		//every reward era, the reward amount halves.
