@@ -1,20 +1,11 @@
-/**
-Testnet added _MINIMUM_TARGET = _MAXIMUM_TARGET.div(100); for 100 difficulty maximum on testnet, doubles every era
-change howMuchETH equation to suit mainnet better. simple 4 stages for testing purposes
-Make sure circulating supply is corrected
-make sure ratio required is adjusted to mainnet eth amounts, same with howMuchETH() function check eth amount
-Delete mintToFree before launch
- *Submitted for verification at Etherscan.io on 2022-12-20
-*/
-
 // Arbitrum Bitcoin and Staking (ABAS) - Token and Mining Contract
 //
 // Distrubtion of Arbitrum Bitcoin and Staking (ABAS) Token is as follows:
-// 57% of ABAS Token is distributed as Liquidiy Pools as rewards in the ABASRewards Contract which distributes tokens to users who deposit the Liquidity Pool tokens into the LPRewards contracts.
+// 40% of ABAS Token is distributed as Liquidiy Pools as rewards in the ABASRewards Contract which distributes tokens to users who deposit the Liquidity Pool tokens into the LPRewards contracts.
 // +
-// 29% of ABAS Token is distributed using ABAS Contract(this Contract) which distributes tokens to users by using Proof of work. Computers solve a complicated problem to gain tokens!
+// 40% of ABAS Token is distributed using ABAS Contract(this Contract) which distributes tokens to users by using Proof of work. Computers solve a complicated problem to gain tokens!
 // +
-// 15% of ABAS Token is Auctioned in the ABASAuctions Contract which distributes tokens to users who use Ethereum to buy tokens in fair price. Each auction lasts ~12 days. Using the Auctions contract.
+// 20% of ABAS Token is Auctioned in the ABASAuctions Contract which distributes tokens to users who use Ethereum to buy tokens in fair price. Each auction lasts ~12 days. Using the Auctions contract.
 // +
 // = 100% Of the Token is distributed to the users! No dev fee or premine!
 //
@@ -22,9 +13,9 @@ Delete mintToFree before launch
 // Symbol: ABAS
 // Decimals: 18 
 //
-// Total supply: 73,500,001.000000000000000000
+// Total supply: 52,500,001.000000000000000000
 //   =
-// 42,000,000 tokens goes to Liquidity Providers of the token over 100+ year using Bitcoin distribution!  Helps prevent LP losses!  Uses the ABASRewards1 & ABASRewards2 Contract!
+// 21,000,000 tokens goes to Liquidity Providers of the token over 100+ year using Bitcoin distribution!  Helps prevent LP losses!  Uses the ABASRewards1 & ABASRewards2 Contract!
 //   +
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years @ 360 min solves. Uses Proof-oF-Work to distribute the tokens. Public Miner is available.  Uses this contract.
 //   +
@@ -32,8 +23,8 @@ Delete mintToFree before launch
 //  
 //
 //      
-// 33% of the Ethereum from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn Ethereum per mint!
-// 66% of the Ethereum from this contract goes to the Liquidity Providers via ABASRewards Contract.  Helps prevent Impermant Loss! Larger Liquidity!
+// 50% of the Ethereum from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn Ethereum per mint!
+// 50% of the Ethereum from this contract goes to the Liquidity Providers via ABASRewards Contract.  Helps prevent Impermant Loss! Larger Liquidity!
 //
 // No premine, dev cut, or advantage taken at launch. Public miner available at launch.  100% of the token is given away fairly over 100+ years using Bitcoins model!
 //
