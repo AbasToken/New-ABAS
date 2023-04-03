@@ -989,7 +989,7 @@ function getRewardBasicBasic(uint choice) public updateReward(msg.sender) {
 * MIT License
 * ===========
 *
-* Copyright (c) 2022 Arbitrum Bitcoin and Staking (ABAS)
+* Copyright (c) 2023 Arbitrum Bitcoin and Staking (ABAS)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
