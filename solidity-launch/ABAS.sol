@@ -26,6 +26,11 @@
 // 50% of the Ethereum from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn Ethereum per mint!
 // 50% of the Ethereum from this contract goes to the Liquidity Providers via ABASRewards Contract.  Helps prevent Impermant Loss! Larger Liquidity!
 //
+// Max Difficulty of 4 TH/s
+// To prevent hashrate griefing at targetTime it is ~0.0001 Ethereum per Mint
+// @ 30x targetTime it is ~0.0000033 Ethereum per Mint
+// This is done to thwart ASICs and high hashrate machines from griefing / ramping difficulty up to stop FPGA profits
+//
 // No premine, dev cut, or advantage taken at launch. Public miner available at launch.  100% of the token is given away fairly over 100+ years using Bitcoins model!
 //
 // Send this contract any ERC20 token and it will become instantly mineable and able to distribute using proof-of-work!
