@@ -519,9 +519,7 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
 	return IERC1155Receiver.onERC1155Received.selector;
 	}
 	
-	uint public sentToLP = 0;
     uint public targetTime = 60 * 12;
-    uint public multipler = 0;
 // SUPPORTING CONTRACTS
     address public AddressAuction;
     ABASAuctionsCT public AuctionsCT;
@@ -540,11 +538,10 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
     uint _totalSupply = 21000000000000000000000000;
     uint public latestDifficultyPeriodStarted2 = block.timestamp; //BlockTime of last readjustment
     uint public epochCount = 0;//number of 'blocks' mined
-	uint public latestreAdjustStarted = block.timestamp; // shorter blocktime of attempted readjustment
+	uint public latestreAdjustStarted = block.timestamp; 
     uint public _BLOCKS_PER_READJUSTMENT = 1024; // should be 1024
-    //a little number
     uint public  _MAXIMUM_TARGET = 2**234;
-    uint public  _MINIMUM_TARGET = _MAXIMUM_TARGET.div(543546542); //100 on testnet, Mainnet = 0xBTC difficulty = 543546542 = 12 min blocks at 4 th/s
+    uint public  _MINIMUM_TARGET = _MAXIMUM_TARGET.div(500000000); //Mainnet = 500000000 = 12 min blocks at 3.6 TH/s
     uint public miningTarget = _MAXIMUM_TARGET.div(200000000000*25);  //1000 million difficulty to start until i enable mining
     
     bytes32 public challengeNumber = ArbSys(0x0000000000000000000000000000000000000064).arbBlockHash( ArbSys(0x0000000000000000000000000000000000000064).arbBlockNumber() - 1);   //generate a new one when a new reward is minted
@@ -553,13 +550,15 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
     uint public reward_amount = 2;
     
     //Stuff for Functions
+	uint public sentToLP = 0; //Total ABAS sent to LP pool
+    uint public multipler = 0; //Multiplier on held Ethereum (more we hold less % we distribute)
     uint public oldecount = 0; //Previous block count for ArewardSender function
     uint public previousBlockTime  =  block.timestamp; // Previous Blocktime
     uint public Token2Per=           1000000; //Amount of ETH distributed per mint somewhat
     uint public tokensMinted = 0;			//Tokens Minted only for Miners
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) allowed;
-    uint public slowBlocks = 0;
+    uint public slowBlocks = 0; //Number of slow blocks (12+ minutes)
     uint public epochOld = 0;  //Epoch count at each readjustment 
     uint public give0x = 0;
     uint public give = 1;
@@ -1464,7 +1463,7 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 * MIT License
 * ===========
 *
-* Copyright (c) 2022 Arbitrum Bitcoin and Staking (ABAS)
+* Copyright (c) 2023 Arbitrum Bitcoin and Staking (ABAS)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
