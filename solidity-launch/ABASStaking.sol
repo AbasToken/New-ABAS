@@ -5,11 +5,11 @@
 // Recieves 21,000,000 ABAS Tokens from the ABASMining Contract over 100+ years.
 // Also recieves 50% of the Ethereum Tokens from the ABAS Contract over forever.
 //
-//
 //// What we are staking: Sushiswap Liquidity Pool tokens for the pair ABAS / Ethereum
 //
 //Rewards: Arbitrum Bitcoin and Staking (ABAS), 0xBitcoin, and Ethereum currently
 // Funds gathered will be dispered over 2 months.
+//
 //Room to Expand to three other cryptocurrencies(Only admin function in all three contracts is to add up to three more cryptocurrencies!)
 
 pragma solidity ^0.8.11;
