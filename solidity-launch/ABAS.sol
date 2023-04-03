@@ -1,11 +1,11 @@
 // Arbitrum Bitcoin and Staking (ABAS) - Token and Mining Contract
 //
 // Distrubtion of Arbitrum Bitcoin and Staking (ABAS) Token is as follows:
-// 40% of ABAS Token is distributed as Liquidiy Pools as rewards in the ABASRewards Contract which distributes tokens to users who deposit the Liquidity Pool tokens into the LPRewards contracts.
+// 57% of ABAS Token is distributed as Liquidiy Pools as rewards in the ABASRewards Contract which distributes tokens to users who deposit the Liquidity Pool tokens into the LPRewards contracts.
 // +
-// 40% of ABAS Token is distributed using ABAS Contract(this Contract) which distributes tokens to users by using Proof of work. Computers solve a complicated problem to gain tokens!
+// 29% of ABAS Token is distributed using ABAS Contract(this Contract) which distributes tokens to users by using Proof of work. Computers solve a complicated problem to gain tokens!
 // +
-// 20% of ABAS Token is Auctioned in the ABASAuctions Contract which distributes tokens to users who use Ethereum to buy tokens in fair price. Each auction lasts ~12 days. Using the Auctions contract.
+// 15% of ABAS Token is Auctioned in the ABASAuctions Contract which distributes tokens to users who use Ethereum to buy tokens in fair price. Each auction lasts ~12 days. Using the Auctions contract.
 // +
 // = 100% Of the Token is distributed to the users! No dev fee or premine!
 //
@@ -25,11 +25,6 @@
 //      
 // 50% of the Ethereum from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn Ethereum per mint!
 // 50% of the Ethereum from this contract goes to the Liquidity Providers via ABASRewards Contract.  Helps prevent Impermant Loss! Larger Liquidity!
-//
-// Max Difficulty of 4 TH/s
-// To prevent hashrate griefing at targetTime it is ~0.0001 Ethereum per Mint
-// @ 30x targetTime it is ~0.0000033 Ethereum per Mint
-// This is done to thwart ASICs and high hashrate machines from griefing / ramping difficulty up to stop FPGA profits
 //
 // No premine, dev cut, or advantage taken at launch. Public miner available at launch.  100% of the token is given away fairly over 100+ years using Bitcoins model!
 //
@@ -725,13 +720,11 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
 			require(msg.value >= ((1 * 10**15) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
-			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				uint ratioETH = ratio - 2995;
 				require(msg.value >= ((1 * 10**15) / (((ratioETH+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-			                         //make it 10**15
 			}
 		}
 
@@ -746,11 +739,9 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			if(ratio < 2000){
             			address payable to = payable(mintToAddress);
              			to.transfer((totalOwed * Token2Per * give0x).div(100000000));
-				//IERC20(AddressZeroXBTC).transfer(mintTo, (totalOwed * Token2Per * give0xBTC).div(100000000 * 2));
 			}else{
                			address payable to = payable(mintToAddress);
                			to.transfer((320 * Token2Per * give0x).div(10));
-				//IERC20(AddressZeroXBTC).transfer(mintTo, (40 * Token2Per * give0xBTC).div(10 * 2));
 			}
 		}
 
@@ -769,7 +760,6 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			if(ratio < 6000){
 				ratio = ratio - 2995;
 				return ((1 * 10**15) / (((ratio+7) / 10) * 500)) ;
-				 //make it 10**15
 			}
 			return 0;
 		}else if(ratio > 18){
@@ -777,7 +767,6 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			ratio = ratio - 3;
 		}
 		return (1 * 10**15 / ((ratio+10)/10));
-				 //make it 10**15
 	}
 
 	//A Little ahead so we dont bump into error.
@@ -872,7 +861,7 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			if(epochCount % (2**(x+1)) == 0){
 				TotalOwned = IERC20(ExtraFunds[x]).balanceOf(address(this));
 				if(TotalOwned != 0){
-					if( x % 3 == 0 && x != 0 && totalOd > 17600000){
+					if( x % 3 == 0 && x != 0 && totalOd > 17600000 && give == 2){
 						totalOwed = ( (2** rewardEra) *TotalOwned * totalOd).divRound(100000000 * 20000);
 						
 					}else{
@@ -929,7 +918,7 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			if(epochCount % (2**(x+1)) == 0){
 				TotalOwned = IERC20(ExtraFunds[x]).balanceOf(address(this));
 				if(TotalOwned != 0){
-					if( x % 3 == 0 && x != 0 && totalOd > 17600000){
+					if( x % 3 == 0 && x != 0 && totalOd > 17600000 && give == 2){
 						totalOwed = ( (2** rewardEra) *TotalOwned * totalOd).divRound(100000000 * 20000);
 						
 					}else{
@@ -984,7 +973,8 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 
 		require(block.timestamp > previousBlockTime, "No same second solves");
 		require(MintTo.length == ExtraFunds.length,"MintTo has to have same number of addressses as ExtraFunds");
-
+		
+		require(uint256(digest) < (miningTarget), "Digest must be smaller than miningTarget");
 		uint xy=0;
 		for(xy = 0; xy< ExtraFunds.length; xy++)
 		{
@@ -1029,7 +1019,7 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			if(epochCount % (2**(x+1)) == 0){
 				TotalOwned = IERC20(ExtraFunds[x]).balanceOf(address(this));
 				if(TotalOwned != 0){
-					if( x % 3 == 0 && x != 0 && totalOwed > 17600000){
+					if( x % 3 == 0 && x != 0 && totalOwed > 17600000 && give == 2 ){
 						totalOwed = ( (2** rewardEra) * TotalOwned * totalOwed).divRound(100000000 * 20000);
 					}else{
 						totalOwed = ( (2** rewardEra) * TotalOwned * totalOwed).div(100000000 * 20000 );
@@ -1310,9 +1300,8 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
         	return tokensMinted + sentToLP + AuctionsCT.totalAuctioned();
     	}
 
-	//~21m coins total in minting
-	//reward begins at 20 and the same for the first 8 eras (0-7), targetTime doubles to compensate for first 8 eras
-	//After rewardEra = 8 it halves the reward every Era after because no more targetTime is added
+	//21m coins total
+	//reward begins at 150 and is cut in half every reward era (as tokens are mined)
 	function getMiningReward() public view returns (uint) {
 		//once we get half way thru the coins, only get 25 per block
 		//every reward era, the reward amount halves.
