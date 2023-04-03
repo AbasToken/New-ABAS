@@ -725,13 +725,11 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
 			require(msg.value >= ((1 * 10**15) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
-			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				uint ratioETH = ratio - 2995;
 				require(msg.value >= ((1 * 10**15) / (((ratioETH+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-			                         //make it 10**15
 			}
 		}
 
@@ -769,7 +767,6 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			if(ratio < 6000){
 				ratio = ratio - 2995;
 				return ((1 * 10**15) / (((ratio+7) / 10) * 500)) ;
-				 //make it 10**15
 			}
 			return 0;
 		}else if(ratio > 18){
@@ -777,7 +774,6 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 			ratio = ratio - 3;
 		}
 		return (1 * 10**15 / ((ratio+10)/10));
-				 //make it 10**15
 	}
 
 	//A Little ahead so we dont bump into error.
@@ -822,13 +818,11 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
 			require(msg.value >= ((1 * 10**15) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
-			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				ratio = ratio - 2995;
 				require(msg.value >= ((1 * 10**15) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-			                        //make it 10**15
 			}
 		}
 
@@ -1011,13 +1005,11 @@ function zinit(address AuctionAddress2, address LPGuild2) public onlyOwner{
 		if(ratio < 3000){
 			totalOwed = (508606*(15*x**2)).div(888 ** 2)+ (9943920 * (x)).div(888);
 			require(msg.value >= ((1 * 10**15) / ((ratio+10)/10)), "Must send more ETH because requires eth, check howMuchETH() function to find amount needed");
-			                    //make it 10**15
 		}else {
 			totalOwed = (24*x*5086060).div(888)+3456750000;
 			if(ratio < 6000){
 				ratio = ratio - 2995;
 				require(msg.value >= ((1 * 10**15) / (((ratio+10) / 10) * 500)), "Must send more ETH because requires eth until 60x targetTime, check howMuchETH() function to find amount needed");
-						  //make it 10**15
 			}
 		}
 
