@@ -180,13 +180,9 @@ contract ABASMining{
 
     using SafeMath for uint;
     using ExtendedMath for uint;
-    address public AddressZeroXBTC;
-    address public AddressForgeToken;
+    address public AddressABASToken;
     // ERC-20 Parameters
     uint256 public extraGas;
-    bool runonce = false;
-    uint256 oneEthUnit = 1000000000000000000; 
-    uint256 one0xBTCUnit =         100000000;
     string public name;
     uint public decimals;
 
@@ -249,7 +245,7 @@ contract ABASMining{
             require(!inited, "Must only run once");
             inited = true;
         nextDayTime = block.timestamp + secondsPerDay;
-        AddressForgeToken = token;
+        AddressABASToken = token;
         owner22 = address(0);
         lastMinted =  0;
         ABASMiningToken = ABASMining(token);
@@ -349,9 +345,9 @@ contract ABASMining{
             _recordBurn(msg.sender, _member, _era, fdays[x], dayamt);
         }
     
-        //require(IERC20(AddressZeroXBTC).transferFrom(msg.sender, AddressForgeToken, stricttotal), "NO OTHER WAY, send it the required 0xBitcoin");
+        //require(IERC20(AddressZeroXBTC).transferFrom(msg.sender, AddressABASToken, stricttotal), "NO OTHER WAY, send it the required 0xBitcoin");
         require(msg.value >= stricttotal, "Must send required ETH");
-        address payable To = payable (AddressForgeToken );
+        address payable To = payable (AddressABASToken);
         To.send(msg.value);
         emit BurnMultipleDays(msg.sender, _member, _era, fdays.length, stricttotal);
         
@@ -362,9 +358,9 @@ contract ABASMining{
 
     function burn0xForMember(address member) public payable returns (bool success) {
         uint day = currentDay;
-       // require(IERC20(AddressZeroXBTC).transferFrom(msg.sender, AddressForgeToken, _0xbtcAmount), "NO WAY, requires 0xBTC send");
+       // require(IERC20(AddressZeroXBTC).transferFrom(msg.sender, AddressABASToken, _0xbtcAmount), "NO WAY, requires 0xBTC send");
 
-        address payable To = payable (AddressForgeToken );
+        address payable To = payable (AddressABASToken);
         To.send(msg.value);
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value);
         emit Burn(msg.sender, member, currentEra, day, msg.value, mapEraDay_Units[currentEra][currentDay]);
@@ -558,7 +554,7 @@ contract ABASMining{
                 }
             } 
         }
-        IERC20(AddressForgeToken).transfer(_member, stricttotal);
+        IERC20(AddressABASToken).transfer(_member, stricttotal);
         emit MegaWithdrawal(msg.sender, _member, _era, fdays.length, stricttotal);
     
         return true;
@@ -595,7 +591,7 @@ contract ABASMining{
             totalEmitted += value*16;            
             emit Withdrawal(msg.sender, _member, _era, _day, value*16, mapEraDay_EmissionRemaining[_era][_day]);
             // ERC20 transfer function
-            IERC20(AddressForgeToken).transfer(_member, value*16); // 8,192 tokens a auction aka almost half the supply an era!
+            IERC20(AddressABASToken).transfer(_member, value*16); // 8,192 tokens a auction aka almost half the supply an era!
         }
         
         return value*16;
@@ -613,7 +609,7 @@ contract ABASMining{
         } else {
             uint totalUnits = mapEraDay_UnitsRemaining[era][day];                           // Get Total Units
             uint emissionRemaining = mapEraDay_EmissionRemaining[era][day];                 // Get emission remaining for Day
-            uint balance = IERC20(AddressForgeToken).balanceOf(address(this));                                      // Find remaining balance
+            uint balance = IERC20(AddressABASToken).balanceOf(address(this));                                      // Find remaining balance
             if (emissionRemaining > balance) { emissionRemaining = balance; }               // In case less than required emission
             value = (emissionRemaining * memberUnits) / totalUnits;                         // Calculate share
             return  value;                            
@@ -667,7 +663,7 @@ contract ABASMining{
        
     // Calculate Day emission
     function getDayEmission() public view returns (uint) {
-        uint balance = (totalEmitted + IERC20(AddressForgeToken).balanceOf(address(this))) - totalAuctioned;                                     // Find remaining balance
+        uint balance = (totalEmitted + IERC20(AddressABASToken).balanceOf(address(this))) - totalAuctioned;                                     // Find remaining balance
         if (balance > emission*16) {                                                           // Balance is sufficient
             return emission;                                                                // Return emission
         } else {                                                                            // Balance has dropped low
@@ -677,9 +673,9 @@ contract ABASMining{
     
     
     function z_transferERC20TokenToMinerContract(address tokenAddress) public returns (bool success) {
-        require(tokenAddress != AddressForgeToken);
+        require(tokenAddress != AddressABASToken);
         
-        return IERC20(tokenAddress).transfer(AddressForgeToken, IERC20(tokenAddress).balanceOf(address(this))); 
+        return IERC20(tokenAddress).transfer(AddressABASToken, IERC20(tokenAddress).balanceOf(address(this))); 
     }
     
     
@@ -690,7 +686,7 @@ contract ABASMining{
 * MIT License
 * ===========
 *
-* Copyright (c) 2022 Arbitrum Bitcoin and Staking (ABAS)
+* Copyright (c) 2023 Arbitrum Bitcoin and Staking (ABAS)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
