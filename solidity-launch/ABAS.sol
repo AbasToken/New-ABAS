@@ -15,7 +15,7 @@
 //
 // Total supply: 52,500,001.000000000000000000
 //   =
-// 21,000,000 tokens goes to Liquidity Providers of the token over 100+ year using Bitcoin distribution!  Helps prevent LP losses!  Uses the ABASRewards1 & ABASRewards2 Contract!
+// 21,000,000 tokens goes to Liquidity Providers of the token over 100+ year using Bitcoin distribution!  Helps prevent LP losses!  Uses the ABASRewards!
 //   +
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years @ 360 min solves. Uses Proof-oF-Work to distribute the tokens. Public Miner is available.  Uses this contract.
 //   +
@@ -541,7 +541,7 @@ contract ArbitrumBitcoinAndStaking is Ownable, IERC20 {
 	uint public latestreAdjustStarted = block.timestamp; 
     uint public _BLOCKS_PER_READJUSTMENT = 1024; // should be 1024
     uint public  _MAXIMUM_TARGET = 2**234;
-    uint public  _MINIMUM_TARGET = _MAXIMUM_TARGET.div(500000000); //Mainnet = 500000000 = 12 min blocks at 3.6 TH/s
+    uint public  _MINIMUM_TARGET = _MAXIMUM_TARGET.div(555000000); //Mainnet = 555000000 = 4 TH/s @ 12 minutes
     uint public miningTarget = _MAXIMUM_TARGET.div(200000000000*25);  //1000 million difficulty to start until i enable mining
     
     bytes32 public challengeNumber = ArbSys(0x0000000000000000000000000000000000000064).arbBlockHash( ArbSys(0x0000000000000000000000000000000000000064).arbBlockNumber() - 1);   //generate a new one when a new reward is minted
