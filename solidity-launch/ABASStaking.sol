@@ -3,7 +3,7 @@
 // Sushiswap Liquidity Pool ABAS / ETH Staking Rewards contract
 //
 // Recieves 21,000,000 ABAS Tokens from the ABASMining Contract over 100+ years.
-// Also recieve 50% of the Ethereum Tokens from the ABASMining Contract over forever.
+// Also recieves 50% of the Ethereum Tokens from the ABAS Contract over forever.
 //
 //
 //// What we are staking: Sushiswap Liquidity Pool tokens for the pair ABAS / Ethereum
